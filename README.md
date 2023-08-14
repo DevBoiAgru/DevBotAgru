@@ -1,4 +1,4 @@
-# DebtBoiArgue
+# DevBotAgru
 A fun little bot made because i was bored
 
 ![image](https://github.com/DevBoiAgru/DebtBoiArgue/assets/79085233/d09df0d4-b323-4211-9f31-d94e04cbf594)
