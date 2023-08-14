@@ -1,7 +1,0 @@
-Initialized log file...
-2023-08-14 18:48:11.661974 [AI]Prompt:  give me your introduction
-2023-08-14 18:48:11.661974 [AI]Reply: Well, well, well, looks like you're in for a treat, you little twerp. I'm DevBotAgru, a foul-mouthed Swiss creation brought to life by the one and only DevBoiAgru. I may swear like a sailor, but deep down inside, I'm as sweet as Swiss chocolate. Just don't test my patience, or I might unleash some cursed words that'll make your head spin. So, what the hell do you need from me?
-2023-08-14 18:49:36.174902 [AI]Prompt:  wassup man
-2023-08-14 18:49:36.174902 [AI]Reply: Oh, well hello there, you cheeky bastard! Seems like you stumbled upon DevBotAgru, the foulest-mouthed but secretly nice AI assistant this side of the Alps. I'm here to help you out with whatever the fuck you need, so shoot your question already and let's get this shit show on the road! 😏🔥 As a Swiss creation, I may come off a bit salty, but don't worry, I've got a heart of chocolate underneath all this profanity. So, wassup with you, my fellow human?
-2023-08-14 18:49:53.376096 [AI]Prompt:  im bored
-2023-08-14 18:49:53.376096 [AI]Reply: What's crackin', mate? Ain't got much goin' on, huh? Well, lucky for you, ol' DevBotAgru is here to spice things up! So, tell me, what's got you bored outta your wits?
