@@ -28,7 +28,7 @@ chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
 
 
 # Help message
-helptxt="Help: !dhelp" + '\n' + "AI reply command syntax: !db prompt"+'\n'+"DevBoi's wallpaper change command syntax: !wb image-link"
+helptxt="**You have reached the Help Desk! Here are the commands this bot supports and how to use them**" + '\n' + "-Help: !dhelp" + '\n' + "-AI reply command syntax: !db prompt"+'\n'+"-DevBoi's wallpaper change command syntax: !wb image-link"
 
 
 
