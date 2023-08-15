@@ -75,7 +75,7 @@ class MyClient(discord.Client):
             print (str(datetime.now()) + " Baller!")
 
         # Crazy? I was Crazy once
-        if any(srchstr in lowermsg for srchstr in ("crazy", "craazy", "crazyy")): 
+        if any(srchstr in lowermsg for srchstr in ("crazy", "craazy")): 
             await message.reply("😝 Crazy? 🤪 I 😀 Was Crazy 🤪 Once. They 👩‍👩‍👦‍👦 Locked 🔒 Me In A Room. 🚺 A Rubber Room. 🧖 A Rubber Room 🧖‍♂️ With Rats. 🐀 And Rats 🐀 Make Me Crazy 🤪", mention_author=True)
             with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                 text_file.write(str(datetime.now()) + " [CRAZYPASTA] " + '\n')
