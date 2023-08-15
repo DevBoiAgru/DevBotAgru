@@ -10,7 +10,9 @@ Default AI reply prefix: "!db" command syntax: !db <prompt>
 
 Wallpaper change prefix: "!wb" command syntax: !wb <image-link>
 
-It auto replies with a GIF if your message contains the word Balls
+Auto replies with a GIF if your message contains the word Balls
+
+Auto replies the "crazy? i was crazy once" copypasta if your message contains the word Crazy.
 
 ## AI Chatbot personality:
 Fun and chill bloke who uses discord, be careful though, it can swear, and it might even insult you (all of this is programmable through the pre prompt)
