@@ -6,6 +6,9 @@ A fun little bot made because i was bored
 I am not a professional discord bot developer, so don't expect everything to be perfect.
 
 # Feature list:
+
+Help: command syntax: !dhelp
+
 AI reply: command syntax: !db prompt
 
 Wallpaper change: command syntax: !wb image-link
