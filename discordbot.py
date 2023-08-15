@@ -59,7 +59,7 @@ class MyClient(discord.Client):
             return
 
         # AI Reply
-        if message.content.startswith(ai_pref):
+        if message.content.startswith(ai_pref) and message.author.id != gooberfile.ai_ban: # Change gooberfile.ai_ban to user ID you want the bot to not reply to
             msg = message.content.removeprefix(ai_pref)
             result=gpt(msg)
             await message.reply(result, mention_author=True)
@@ -72,6 +72,11 @@ class MyClient(discord.Client):
                 text_file.write(str(datetime.now()) + " [BALLED] " + '\n')
             print (str(datetime.now()) + " Baller!")
 
+
+        # Buffoonery
+        if message.author.id == gooberfile.clingtarget: # Replace gooberfile.clingtarget with user ID of whoever you want the bot to reply with the content below
+            await message.reply("hi daddy i love you!! you are so handsome i love you so much i cannot describe how much i love you", mention_author=True)
+            
 
         # WALLPAPER FUN
         if message.content.startswith("!wb ") and True: # Change True to False when wallpaper event is over
