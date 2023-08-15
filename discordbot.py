@@ -27,6 +27,11 @@ messages = [ {"role": "system", "content":
 chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
 
 
+# Help message
+helptxt="Help: !dhelp" + '\n' + "AI reply command syntax: !db prompt"+'\n'+"DevBoi's wallpaper change command syntax: !wb image-link"
+
+
+
 # FUNCTIONS!
 
 
@@ -109,6 +114,13 @@ class MyClient(discord.Client):
                 text_file.write(str(datetime.now()) + " WALLPAPER UPDATED TO " + imgsrc + "\n")
             print (str(datetime.now()) + " WALLPAPER UPDATED TO " + imgsrc)
 
+
+
+        # Help
+        if message.content.startswith("!dhelp"):
+            await message.reply(helptxt, mention_author=True)
+        
+        
         #await message.reply(message.content, mention_author=True)
         # repeat the message for no reason lol
 
