@@ -58,6 +58,8 @@ class MyClient(discord.Client):
         if message.author.id == self.user.id:
             return
 
+        lowermsg=message.content.lower() # message but lowercase
+
         # AI Reply
         if message.content.startswith(ai_pref) and message.author.id != gooberfile.ai_ban: # Change gooberfile.ai_ban to user ID you want the bot to not reply to
             msg = message.content.removeprefix(ai_pref)
@@ -66,12 +68,18 @@ class MyClient(discord.Client):
             #await message.delete()
         
         # Balls
-        if any(srchstr in message.content for srchstr in ("balls" , "BALLS" , "Balls" , "bollz" , "Bollz" , "ball" , "Ball" , "Baller" , "Ball")):
+        if any(srchstr in lowermsg for srchstr in ("balls", "bollz", "ball",  "baller")): 
             await message.reply("https://cdn.discordapp.com/attachments/1139817292356661248/1140326845418578021/tenor.gif", mention_author=True)
             with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                 text_file.write(str(datetime.now()) + " [BALLED] " + '\n')
             print (str(datetime.now()) + " Baller!")
 
+        # Crazy? I was Crazy once
+        if any(srchstr in lowermsg for srchstr in ("crazy", "craazy", "crazyy")): 
+            await message.reply("😝 Crazy? 🤪 I 😀 Was Crazy 🤪 Once. They 👩‍👩‍👦‍👦 Locked 🔒 Me In A Room. 🚺 A Rubber Room. 🧖 A Rubber Room 🧖‍♂️ With Rats. 🐀 And Rats 🐀 Make Me Crazy 🤪", mention_author=True)
+            with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                text_file.write(str(datetime.now()) + " [CRAZYPASTA] " + '\n')
+            print (str(datetime.now()) + " i was crazy once")
 
         # Buffoonery
         if message.author.id == gooberfile.clingtarget: # Replace gooberfile.clingtarget with user ID of whoever you want the bot to reply with the content below
