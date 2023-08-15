@@ -16,6 +16,8 @@ Auto replies the "crazy? i was crazy once" copypasta if your message contains th
 
 Replies with a certain message to every message a user with specific User ID sends. (change this by replacing gooberfile.clingtarget with the user ID you want)
 
+And much more to come!
+
 ## AI Chatbot personality:
 Fun and chill bloke who uses discord, be careful though, it can swear, and it might even insult you (all of this is programmable through the pre prompt)
 
