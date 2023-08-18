@@ -10,6 +10,7 @@ I am not a professional discord bot developer, so don't expect everything to be 
 Help: command syntax: !dhelp
 
 AI reply: command syntax: !db prompt
+with cooldown to prevent spamming and rate limiting.
 
 Auto replies with a GIF if your message contains the word Balls
 
