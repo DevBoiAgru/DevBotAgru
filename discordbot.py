@@ -69,7 +69,12 @@ class MyClient(discord.Client):
         if message.content.startswith(ai_pref) and message.author.id != gooberfile.ai_ban: # Change gooberfile.ai_ban to user ID you want the bot to not reply to
             msg = message.content.removeprefix(ai_pref)
             result=gpt(msg)
-            await message.reply(result, mention_author=True)
+
+            # Use embed for replying instead of messages for longer replies
+            msgembed = discord.Embed(title=msg, description=result, colour=discord.Colour(0x08ea8e))
+            msgembed.add_field(name="Reply length: ", value=str(str(len(result)) + " characters."), inline=False)
+            await message.reply(embed=msgembed, mention_author=True)
+            
             #await message.delete()
         
         # Balls
