@@ -7,11 +7,6 @@ from datetime import datetime
 import gooberfile # Contains the bot token and open ai api key (Im too lazy to use .env)
 
 
-# TEMPORARY!! REMOVE WHEN WALLPAPER EVENT IS OVER!!
-import requests
-import ctypes
-
-
 # "log" file
 with open("exhaust.txt", "w") as text_file:
     text_file.write("Initialized log file...")
@@ -28,7 +23,7 @@ chat = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
 
 
 # Help message
-helptxt="**You have reached the Help Desk! Here are the commands this bot supports and how to use them**" + '\n' + "-Help: !dhelp" + '\n' + "-AI reply command syntax: !db prompt"+'\n'+"-DevBoi's wallpaper change command syntax: !wb image-link"
+helptxt="**You have reached the Help Desk! Here are the commands this bot supports and how to use them**" + '\n' + "-Help: !dhelp" + '\n' + "-AI reply command syntax: !db prompt"
 
 
 
@@ -95,30 +90,6 @@ class MyClient(discord.Client):
         if message.author.id == gooberfile.clingtarget: # Replace gooberfile.clingtarget with user ID of whoever you want the bot to reply with the content below
             await message.reply("hi daddy i love you!! you are so handsome i love you so much i cannot describe how much i love you", mention_author=True)
             
-
-        # WALLPAPER FUN
-        if message.content.startswith("!wb ") and True: # Change True to False when wallpaper event is over
-            #Using !wb directly instead of a variable because this is temporary
-            imgsrc = message.content.removeprefix("!wb ")
-            await message.reply("Wallpaper updated <@&988315498351591495>", mention_author=True)
-            response = requests.get(imgsrc)
-            with open("W:\\fun\wb.jpg", "wb") as f:
-                f.write(response.content)
-            
-            # Path to the image you want to set as the background
-            image_path = gooberfile.wallpaperimage_path
-
-            # Function to set the desktop background
-            def set_wallpaper(image_path):
-                SPI_SETDESKWALLPAPER = 20
-                ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, image_path, 3)
-
-            # Call the function to set the wallpaper
-            set_wallpaper(image_path)
-            with open("exhaust.txt", "a", encoding="utf-8") as text_file:
-                text_file.write(str(datetime.now()) + " WALLPAPER UPDATED TO " + imgsrc + "\n")
-            print (str(datetime.now()) + " WALLPAPER UPDATED TO " + imgsrc)
-
 
 
         # Help
