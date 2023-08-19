@@ -26,8 +26,7 @@ coolDown = 0
 idle = True
 
 # Help message
-helptxt="**You have reached the Help Desk! Here are the commands this bot supports and how to use them**" + '\n' + "-Help: !dhelp" + '\n' + "-AI reply command syntax: !db prompt"
-
+helptxt="**You have reached the help desk!** \n Here are the commands you can use: \n 1. !db <prompt> for AI Replies \n 2. !wb <image link> to change devboi's wallpaper \n 3. !meow for random cat pictures \n 4. !woof for random dog pictures \n 5. !random for a random picture. \n Enjoy!"
 
 
 # FUNCTIONS!
