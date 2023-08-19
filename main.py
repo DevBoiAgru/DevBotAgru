@@ -7,7 +7,6 @@ from datetime import datetime
 import time
 import gooberfile # Contains the bot token and open ai api key (Im too lazy to use .env)
 
-
 # "log" file
 with open("exhaust.txt", "w") as text_file:
     text_file.write("Initialized log file...")
