@@ -6,6 +6,8 @@ import openai
 from datetime import datetime
 import time
 import gooberfile # Contains the bot token and open ai api key (Im too lazy to use .env)
+import requests
+import json
 
 # "log" file
 with open("exhaust.txt", "w") as text_file:
@@ -91,6 +93,28 @@ class MyClient(discord.Client):
                 # Command is on cooldown or bot is busy on generating another answer
                 await message.reply("**Command is on cooldown.** Try again later.", mention_author=True)
        
+        # Cat image
+        if message.content.startswith("!meow"):
+            catresponse = requests.get("https://api.thecatapi.com/v1/images/search")
+            catdata = catresponse.json()
+            catimg = url=catdata[0]['url']
+            catembed = discord.Embed(title="Meow 🐈", colour=discord.Colour(0x08ea8e))
+            catembed.set_image(url=catimg)
+            await message.reply(embed=catembed, mention_author=True)
+            with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                text_file.write(str(datetime.now()) + " [DOGGY IMAGE] " + '\n')
+
+        # Dog image
+        if message.content.startswith("!woof"):
+            dogresponse = requests.get("https://random.dog/woof.json")
+            dogdata = dogresponse.json()
+            dogimg = url=dogdata['url']
+            dogembed = discord.Embed(title="Woof 🐕", colour=discord.Colour(0x08ea8e))
+            dogembed.set_image(url=dogimg)
+            await message.reply(embed=dogembed, mention_author=True)
+            with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                text_file.write(str(datetime.now()) + " [DOGGY IMAGE] " + '\n')
+
         # Balls
         if any(srchstr in lowermsg for srchstr in ("balls", "bollz", "ball",  "baller")): 
             await message.reply("https://cdn.discordapp.com/attachments/1139817292356661248/1140326845418578021/tenor.gif", mention_author=True)

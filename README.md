@@ -12,6 +12,10 @@ Help: command syntax: !dhelp
 AI reply: command syntax: !db prompt
 with cooldown to prevent spamming and rate limiting.
 
+Cat photos: !meow for random cat photo / gif
+
+Dog photos: !woof for random dog photo / gif
+
 Auto replies with a GIF if your message contains the word Balls
 
 Auto replies the "crazy? i was crazy once" copypasta if your message contains the word Crazy.
