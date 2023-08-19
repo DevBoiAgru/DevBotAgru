@@ -29,7 +29,7 @@ Fun and chill bloke who uses discord, be careful though, it can swear, and it mi
 
 ![image](https://github.com/DevBoiAgru/DebtBoiArgue/assets/79085233/3477f89c-0787-4963-b87e-6ad99fc14300)
 
-### The bot uses discord.py for, well, discord, openai for the AI message replying, datetime module.
+### The bot uses discord.py for, well, discord, openai for the AI message replying.
 
 For using your own discord bot token, replace gooberfile.bot_token with yout token, and for the openai api key, change gooberfile.OPENAI_API_KEY with your api key.
 ![image](https://github.com/DevBoiAgru/DebtBoiArgue/assets/79085233/c105afa2-e811-476a-96fa-1d0afa95a7f6)
