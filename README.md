@@ -50,7 +50,4 @@ openai
 
 If you have any suggestions or queries, feel free to join my discord server and let me know! 
 
-## You can let bot users to change your desktop wallpaper ONLY IF YOU HOST THE BOT ON YOUR WINDOWS MACHINE!!!
-also, the code for it is probably sub optimal but again, i made the bot for fun so who cares.
-
 # Enjoy!
