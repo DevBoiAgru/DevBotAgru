@@ -26,7 +26,19 @@ coolDown = 0
 idle = True
 
 # Help message
-helptxt="**You have reached the help desk!** \n Here are the commands you can use: \n 1. !db <prompt> for AI Replies \n 2. !wb <image link> to change devboi's wallpaper \n 3. !meow for random cat pictures \n 4. !woof for random dog pictures \n 5. !random for a random picture. \n Enjoy!"
+helptxt="""# You have reached the help desk!
+
+**Here are the commands you can use:** 
+
+Help: command syntax: !dhelp
+AI reply: command syntax: !db prompt
+Cat photos: !meow for random cat photo / gif
+Dog photos: !woof for random dog photo / gif
+Dad joke: !dadjoke
+Joke: !joke
+Fun fact: !fact
+
+**Enjoy!**"""
 
 
 # FUNCTIONS!
@@ -74,7 +86,8 @@ class MyClient(discord.Client):
                 
                 # Check if prompt is too long
                 if len(msg)>670: # Prompt character limit, helpful to prevent jailbreaking
-                    await message.reply("**Prompt is too long.** Try shortening it.", mention_author=True)
+                    errembed = discord.Embed(title="Prompt too long!", description="The prompt you entered is too long! Try a shorter prompt (<666 characters)", colour=discord.Colour(0xFF0000))
+                    await message.reply(embed = errembed, mention_author=True)
                 else:
                     # Reset cooldown
                     coolDown = time.time() + 10 # Change the number to tweak the cooldown
@@ -90,7 +103,8 @@ class MyClient(discord.Client):
                     idle = True
             else:
                 # Command is on cooldown or bot is busy on generating another answer
-                await message.reply("**Command is on cooldown.** Try again later.", mention_author=True)
+                errembed = discord.Embed(title="Hold on!", description="Command is on cooldown, try again later 😁", colour=discord.Colour(0xFF0000))
+                await message.reply(embed = errembed, mention_author=True)
        
         # Cat image
         if message.content.startswith("!meow"):
@@ -128,6 +142,7 @@ class MyClient(discord.Client):
                 print (fact)
             else:
                 factembed = discord.Embed(title="Not so fun fact", description="Error getting fun fact, try again later", colour=discord.Colour(0xFF0000))
+                await message.reply (embed = factembed, mention_author = True)
                 with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                     text_file.write(str(datetime.now() + " [FUN FACT ERROR]:" + factresponse.status_code + factresponse.text + '\n'))
                 print("Error:", factresponse.status_code, factresponse.text)
@@ -146,6 +161,7 @@ class MyClient(discord.Client):
                 print (dadjoke)
             else:
                 dadembed = discord.Embed(title="No dad joke 😔", description="Error getting dad joke, try again later", colour=discord.Colour(0xFF0000))
+                await message.reply (embed = dadembed, mention_author = True)
                 with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                     text_file.write(str(datetime.now() + " [DAD JOKE ERROR]:" + dadresponse.status_code + dadresponse.text + '\n'))
                 print("Error:", dadresponse.status_code, dadresponse.text)
@@ -164,6 +180,7 @@ class MyClient(discord.Client):
                 print (joke)
             else:
                 jokeembed = discord.Embed(title="No joke 😔", description="Error getting joke, try again later", colour=discord.Colour(0xFF0000))
+                await message.reply (embed = jokeembed, mention_author = True)
                 with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                     text_file.write(str(datetime.now() + " [JOKE ERROR]:" + jokeresponse.status_code + jokeresponse.text + '\n'))
                 print("Error:", jokeresponse.status_code, jokeresponse.text)
@@ -190,7 +207,8 @@ class MyClient(discord.Client):
 
         # Help
         if message.content.startswith("!dhelp"):
-            await message.reply(helptxt, mention_author=True)
+            helpembed = discord.Embed(title="Looking for help? I got you 😉", description= helptxt, colour=discord.Colour(0x08ea8e))
+            await message.reply(embed = helpembed, mention_author=True)
         
         
         #await message.reply(message.content, mention_author=True)
