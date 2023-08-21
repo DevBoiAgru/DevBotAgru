@@ -7,7 +7,7 @@ from datetime import datetime
 import time
 import gooberfile # Contains the bot token and open ai api key (Im too lazy to use .env)
 import requests
-import json
+
 
 # "log" file
 with open("exhaust.txt", "w") as text_file:
@@ -107,15 +107,69 @@ class MyClient(discord.Client):
         if message.content.startswith("!woof"):
             dogresponse = requests.get("https://random.dog/woof.json")
             dogdata = dogresponse.json()
-            dogimg = url=dogdata['url']
+            dogimg = dogdata['url']
             dogembed = discord.Embed(title="Woof 🐕", colour=discord.Colour(0x08ea8e))
             dogembed.set_image(url=dogimg)
             await message.reply(embed=dogembed, mention_author=True)
             with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                 text_file.write(str(datetime.now()) + " [DOGGY IMAGE] " + '\n')
+        
+        # Fun fact
+        if message.content.startswith("!fact"):
+            api_url = 'https://api.api-ninjas.com/v1/facts?limit=1'
+            factresponse = requests.get(api_url, headers={'X-Api-Key': gooberfile.api_ninja_key})
+            if factresponse.status_code == requests.codes.ok:
+                factdata = factresponse.json()
+                fact = factdata[0]["fact"]
+                factembed = discord.Embed(title="Fun fact! 🤯", description=fact, colour=discord.Colour(0x08ea8e))
+                await message.reply(embed = factembed, mention_author = True)
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now()) + " [FUN FACT]: " + fact + '\n')
+                print (fact)
+            else:
+                factembed = discord.Embed(title="Not so fun fact", description="Error getting fun fact, try again later", colour=discord.Colour(0xFF0000))
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now() + " [FUN FACT ERROR]:" + factresponse.status_code + factresponse.text + '\n'))
+                print("Error:", factresponse.status_code, factresponse.text)
+
+        # Dad joke
+        if message.content.startswith("!dadjoke"):
+            api_url = 'https://api.api-ninjas.com/v1/dadjokes?limit=1'
+            dadresponse = requests.get(api_url, headers={'X-Api-Key': gooberfile.api_ninja_key})
+            if dadresponse.status_code == requests.codes.ok:
+                daddata = dadresponse.json()
+                dadjoke = daddata[0]["joke"]
+                dadembed = discord.Embed(title="Dad joke 😁", description=dadjoke, colour=discord.Colour(0x08ea8e))
+                await message.reply(embed = dadembed, mention_author = True)
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now()) + " [DAD JOKE]: " + dadjoke + '\n')
+                print (dadjoke)
+            else:
+                dadembed = discord.Embed(title="No dad joke 😔", description="Error getting dad joke, try again later", colour=discord.Colour(0xFF0000))
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now() + " [DAD JOKE ERROR]:" + dadresponse.status_code + dadresponse.text + '\n'))
+                print("Error:", dadresponse.status_code, dadresponse.text)
+
+        # Joke
+        if message.content.startswith("!joke"):
+            api_url = 'https://api.api-ninjas.com/v1/jokes?limit=1'
+            jokeresponse = requests.get(api_url, headers={'X-Api-Key': gooberfile.api_ninja_key})
+            if jokeresponse.status_code == requests.codes.ok:
+                jokedata = jokeresponse.json()
+                joke = jokedata[0]["joke"]
+                jokeembed = discord.Embed(title="Joke 🤣", description=joke, colour=discord.Colour(0x08ea8e))
+                await message.reply(embed = jokeembed, mention_author = True)
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now()) + " [JOKE]: " + joke + '\n')
+                print (joke)
+            else:
+                jokeembed = discord.Embed(title="No joke 😔", description="Error getting joke, try again later", colour=discord.Colour(0xFF0000))
+                with open("exhaust.txt", "a", encoding="utf-8") as text_file:
+                    text_file.write(str(datetime.now() + " [JOKE ERROR]:" + jokeresponse.status_code + jokeresponse.text + '\n'))
+                print("Error:", jokeresponse.status_code, jokeresponse.text)
 
         # Balls
-        if any(srchstr in lowermsg for srchstr in ("balls", "bollz", "ball",  "baller")): 
+        if any(srchstr in lowermsg for srchstr in ("bollz", "ball",  "baller")): 
             await message.reply("https://cdn.discordapp.com/attachments/1139817292356661248/1140326845418578021/tenor.gif", mention_author=True)
             with open("exhaust.txt", "a", encoding="utf-8") as text_file:
                 text_file.write(str(datetime.now()) + " [BALLED] " + '\n')

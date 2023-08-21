@@ -16,6 +16,12 @@ Cat photos: !meow for random cat photo / gif
 
 Dog photos: !woof for random dog photo / gif
 
+Dad joke: !dadjoke
+
+Joke: !joke
+
+Fun fact: !fact
+
 Auto replies with a GIF if your message contains the word Balls
 
 Auto replies the "crazy? i was crazy once" copypasta if your message contains the word Crazy.
@@ -34,6 +40,11 @@ Fun and chill bloke who uses discord, be careful though, it can swear, and it mi
 For using your own discord bot token, replace gooberfile.bot_token with yout token, and for the openai api key, change gooberfile.OPENAI_API_KEY with your api key.
 ![image](https://github.com/DevBoiAgru/DebtBoiArgue/assets/79085233/c105afa2-e811-476a-96fa-1d0afa95a7f6)
 
+## APIs used:
+api-ninjas.com
+random.dog
+thecatapi.com
+openai
 
 
 If you have any suggestions or queries, feel free to join my discord server and let me know! 
