@@ -121,7 +121,7 @@ class MyClient(discord.Client):
         if message.content.startswith("!woof"):
             dogresponse = requests.get("https://random.dog/woof.json")
             dogdata = dogresponse.json()
-            dogimg = dogdata['url']
+            dogimg = url = dogdata['url']
             dogembed = discord.Embed(title="Woof 🐕", colour=discord.Colour(0x08ea8e))
             dogembed.set_image(url=dogimg)
             await message.reply(embed=dogembed, mention_author=True)
