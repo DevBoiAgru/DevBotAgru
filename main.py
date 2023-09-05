@@ -95,6 +95,19 @@ class MyClient(discord.Client):
                     # Generate the reply and set idle to false
                     idle = False
                     result=gpt(msg)
+                    # Check if reply is too long ofr a single embed
+                    if len(result) > 3999: # If message is huge then slice it into 2 parts and send them seperately
+                        msgembed = discord.Embed(title=msg,description=result[:4000],colour=discord.Colour(0x08ea8e))
+                        await message.reply(embed = msgembed, mention_author=True)
+                        msgembed = discord.Embed(title="continuing...",description=result[4000:],colour=discord.Colour(0x08ea8e))
+                        await message.reply(embed = msgembed, mention_author=True)
+                    else: # If message is not very large, send it normally.
+                        # Use embed for replying
+                        msgembed = discord.Embed(title=msg,description=result,colour=discord.Colour(0x08ea8e))
+                        msgembed.add_field(name="Reply length: ",
+                                        value=str(str(len(result)) + " characters."),
+                                        inline=False)
+                        await message.reply(embed=msgembed, mention_author=True)
 
                     # Use embed for replying and set bot back to idle
                     msgembed = discord.Embed(title=msg, description=result, colour=discord.Colour(0x08ea8e))
