@@ -7,22 +7,22 @@ I am not a professional discord bot developer, so don't expect everything to be 
 
 # Feature list:
 
-Help: command syntax: !dhelp
+Help: command syntax: /help
 
-AI reply: command syntax: !db prompt
+AI reply: command syntax: /db prompt
 with cooldown to prevent spamming and rate limiting.
 
-Cat photos: !meow for random cat photo / gif
+Random cat photos: /meow
 
-Dog photos: !woof for random dog photo / gif
+Random dog photos: /woof
 
-Dad joke: !dadjoke
+Dad joke: /dadjoke
 
-Joke: !joke
+Joke: /joke
 
-Fun fact: !fact
+Fun fact: /fact
 
-Meme (random hot post from specified meme subs): !meme
+Meme (random hot post from specified meme subs): /meme
 
 Auto replies with a GIF if your message contains the word Balls or similar
 
