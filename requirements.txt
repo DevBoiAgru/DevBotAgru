@@ -1,0 +1,6 @@
+requests
+discord
+openai
+python-dotenv
+praw
+urllib

@@ -22,11 +22,11 @@ Joke: !joke
 
 Fun fact: !fact
 
-Auto replies with a GIF if your message contains the word Balls
+Meme (random hot post from specified meme subs): !meme
+
+Auto replies with a GIF if your message contains the word Balls or similar
 
 Auto replies the "crazy? i was crazy once" copypasta if your message contains the word Crazy.
-
-Replies with a certain message to every message a user with specific User ID sends. (change this by replacing gooberfile.clingtarget with the user ID you want)
 
 And much more to come!
 
@@ -46,6 +46,9 @@ api-ninjas.com
 random.dog
 thecatapi.com
 openai
+reddit
+
+### Find all the required modules in requirements.txt
 
 
 If you have any suggestions or queries, feel free to join my discord server and let me know! 
