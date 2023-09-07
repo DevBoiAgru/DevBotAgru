@@ -167,8 +167,6 @@ class MyClient(discord.Client):
                 statusType = 0
             await asyncio.sleep(60) # Delay before switching to the next status
 
-
-
     async def on_message(self, message):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
