@@ -84,7 +84,7 @@ async def on_ready():
             await bot.change_presence(activity=discord.Streaming(name=STREAMING_STATUS, url=STREAM_URL))  
             f.log ("[STATUS UPDATED]: Changed status to streaming." + '\n')
             statusType = 0
-        await asyncio.sleep(60) # Delay before switching to the next status
+        await asyncio.sleep(30) # Delay before switching to the next status
 
 # Event whenever a message is sent which the bot can read.
 @bot.event
