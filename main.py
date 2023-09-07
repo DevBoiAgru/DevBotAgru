@@ -59,12 +59,12 @@ STREAM_URL = "https://www.youtube.com/channel/UCUvotYmBARsxDRcyF2TvegA" # Url to
 @bot.event
 # BOT LOGIC
 async def on_ready():
-  f.log ("---BOT READY---" + '\n')
-  try:
-    synced = await bot.tree.sync()
-    f.log (f"[SYNC]: Synced {len(synced)} command(s) successfully!" '\n')
-  except Exception as e:
-    f.log("[SYNC]: ERROR: " + e)
+    f.log ("---BOT READY---" + '\n')
+    try:
+        synced = await bot.tree.sync()
+        f.log (f"[SYNC]: Synced {len(synced)} command(s) successfully!" '\n')
+    except Exception as e:
+        f.log("[SYNC]: ERROR: " + e)
     statusType = 0
     while True:
         # Cycle through status
