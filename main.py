@@ -50,7 +50,7 @@ Fun fact: /fact
 PLAYING_STATUS = "DevBoi's Games" # Text to display when the bot has playing status
 WATCHING_STATUS = "the world burn." # Text wi display when the bot has watching status
 LISTENING_STATUS = "the voices" # Text to display when bot has listening status
-STREAMING_STATUS = "with pain" # Text to display when bot has streaming status
+STREAMING_STATUS = "with fire" # Text to display when bot has streaming status
 STREAM_URL = "https://www.youtube.com/channel/UCUvotYmBARsxDRcyF2TvegA" # Url to show when streaming status is applied
 
 
