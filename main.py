@@ -208,11 +208,6 @@ class MyClient(discord.Client):
                                         value=str(str(len(result)) + " characters."),
                                         inline=False)
                         await message.reply(embed=msgembed, mention_author=True)
-
-                    # Use embed for replying and set bot back to idle
-                    msgembed = discord.Embed(title=msg, description=result, colour=discord.Color.from_rgb(embed_colour[0], embed_colour[1], embed_colour[2]))
-                    msgembed.add_field(name="Reply length: ", value=str(str(len(result)) + " characters."), inline=False)
-                    await message.reply(embed=msgembed, mention_author=True)
                     idle = True
             else:
                 # Command is on cooldown or bot is busy on generating another answer
