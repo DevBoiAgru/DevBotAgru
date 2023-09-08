@@ -24,10 +24,6 @@ Fun fact: /fact
 
 Meme (random hot post from specified meme subs): /meme
 
-Auto replies with a GIF if your message contains the word Balls or similar
-
-Auto replies the "crazy? i was crazy once" copypasta if your message contains the word Crazy.
-
 And much more to come!
 
 ## AI Chatbot personality:

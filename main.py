@@ -93,19 +93,6 @@ async def on_message(message):
     if message.author.id == bot.user.id:
        pass
     
-    else:
-        lowermsg = message.content.lower() # Lower the message's case so that "==" operations are case insensitive
-
-        # Balls
-        if any(srchstr in lowermsg for srchstr in ("boll", "ball")):
-            await message.reply("https://cdn.discordapp.com/attachments/1139817292356661248/1140326845418578021/tenor.gif", mention_author=True)
-            f.log ("[BALLER GIF] Target = " + str(message.author) + " MESSAGE ID: " + str(message.id) + '\n')
-
-        # Crazy? I was Crazy once
-        if any(srchstr in lowermsg for srchstr in ("crazy", "craazy")):
-            await message.reply("😝 Crazy? 🤪 I 😀 Was Crazy 🤪 Once. They 👩‍👩‍👦‍👦 Locked 🔒 Me In A Room. 🚺 A Rubber Room. 🧖 A Rubber Room 🧖‍♂️ With Rats. 🐀 And Rats 🐀 Make Me Crazy 🤪", mention_author=True)
-            f.log ("[CRAZY COPYPASTA] Target = " + str(message.author) + " MESSAGE ID: " + str(message.id) + '\n')
-
 # <------- COMMANDS ------->
   # Check functions.py for explaination on the functions
 
