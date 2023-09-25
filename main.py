@@ -108,7 +108,7 @@ async def on_command_error(ctx, error):
 async def help(interaction: discord.Interaction):
   await interaction.response.defer()
   helpembed = discord.Embed(title="Looking for help? I got you 😉", description= helptxt, colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
-  await interaction.response.followup.send(embed = helpembed, ephemeral=True)
+  await interaction.followup.send(embed = helpembed, ephemeral=True)
 
 # AI Chatbot
 @bot.tree.command(name="devbot", description="Chat with DevBotAgru!")
