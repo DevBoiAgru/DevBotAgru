@@ -106,7 +106,7 @@ async def help(interaction: discord.Interaction):
 async def ai(interaction: discord.Interaction, prompt: str):
     await interaction.response.defer()
     if len(prompt) > 255: # Check if prompt is too long
-       msgembed = f.error("Prompt too long!", "Write a prompt shorter than 256 characters please 😊")
+       msgembed = f.error("Prompt too long!", "Write a prompt shorter than 256 characters please 😁")
        f.log ("[AI]: Prompt too long: " + prompt)
     else: 
         result=f.gpt(prompt)
