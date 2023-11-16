@@ -5,15 +5,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import asyncio
-from dotenv import load_dotenv
-import os
-import random as r
 import functions as f
 
-load_dotenv()
 
 # Initialize bot
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = f.BOT_TOKEN
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -21,13 +17,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 # CUSTOMIZABLE VARIABLES
 
-# Subreddits to choose a meme from
-memesubs = [
-    "memes",
-    "dankmemes",
-    "196",
-    "surrealmemes"
-]
+
 
 # Text to show when someone uses the help command
 helptxt="""
@@ -47,13 +37,11 @@ Fun fact: /fact
 **Enjoy!**
 """
 
-PLAYING_STATUS = "DevBoi's Games" # Text to display when the bot has playing status
-WATCHING_STATUS = "the world burn." # Text wi display when the bot has watching status
-LISTENING_STATUS = "the voices" # Text to display when bot has listening status
-STREAMING_STATUS = "with fire" # Text to display when bot has streaming status
-STREAM_URL = "https://www.youtube.com/channel/UCUvotYmBARsxDRcyF2TvegA" # Url to show when streaming status is applied
-
-
+PLAYING_STATUS   = "DevBoi's Games"                                             # Text to display when the bot has playing status
+WATCHING_STATUS  = "the world burn."                                            # Text to display when the bot has watching status
+LISTENING_STATUS = "the voices"                                                 # Text to display when bot has listening status
+STREAMING_STATUS = "with fire"                                                  # Text to display when bot has streaming status
+STREAM_URL       = "https://www.youtube.com/channel/UCUvotYmBARsxDRcyF2TvegA"   # Url to show when streaming status is applied
 
 
 @bot.event
@@ -70,19 +58,19 @@ async def on_ready():
         # Cycle through status
         if statusType == 0:
             await bot.change_presence(activity=discord.Game(name=PLAYING_STATUS))
-            f.log ("[STATUS UPDATED]: Changed status to playing." + '\n')
+            print ("[STATUS UPDATED]: Changed status to playing." + '\n')
             statusType = 1
         elif statusType == 1:
             await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=WATCHING_STATUS))
-            f.log ("[STATUS UPDATED]: Changed status to watching." + '\n')
+            print ("[STATUS UPDATED]: Changed status to watching." + '\n')
             statusType = 2
         elif statusType == 2:
             await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.listening, name=LISTENING_STATUS))
-            f.log ("[STATUS UPDATED]: Changed status to listening." + '\n')
+            print ("[STATUS UPDATED]: Changed status to listening." + '\n')
             statusType = 3
         else:
             await bot.change_presence(activity=discord.Streaming(name=STREAMING_STATUS, url=STREAM_URL))  
-            f.log ("[STATUS UPDATED]: Changed status to streaming." + '\n')
+            print ("[STATUS UPDATED]: Changed status to streaming." + '\n')
             statusType = 0
         await asyncio.sleep(30) # Delay before switching to the next status
 
@@ -94,7 +82,8 @@ async def on_message(message):
        pass
     
 # <------- COMMANDS ------->
-  # Check functions.py for explaination on the functions
+  # Check functions.py for the functions
+  # Change the name and description of commands according to your liking
 
 # Command on cooldown
 @bot.event
@@ -118,13 +107,14 @@ async def ai(interaction: discord.Interaction, prompt: str):
     await interaction.response.defer()
     if len(prompt) > 255: # Check if prompt is too long
        msgembed = f.error("Prompt too long!", "Write a prompt shorter than 256 characters please 😊")
-       f.log ("[AI]: Prompt too long")
+       f.log ("[AI]: Prompt too long: " + prompt)
     else: 
         result=f.gpt(prompt)
         if len(result) > 3999: # If message is huge then slice it into 2 parts and send them seperately
             msgembed = discord.Embed(title=prompt,description=result[:4000],colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
             await interaction.followup.send(embed = msgembed, ephemeral=False)
             msgembed = discord.Embed(title="continuing...",description=result[4000:],colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
+            msgembed.add_field(name="Reply length: ", value=str(str(len(result)) + " characters."), inline=False)
             await interaction.followup.send(embed = msgembed, ephemeral=False)
         else: # If message is not very large, send it normally.
             # Use embed for replying
@@ -155,8 +145,7 @@ async def help(interaction: discord.Interaction):
 @bot.tree.command(name="meme", description="Get a random meme from reddit")
 async def help(interaction: discord.Interaction):
   await interaction.response.defer()
-  sub = r.choice(memesubs)
-  await interaction.followup.send(embed = f.meme(sub, 10), ephemeral=False) 
+  await interaction.followup.send(embed = f.meme(10), ephemeral=False) 
 
 # Cat pic
 @bot.tree.command(name="meow", description="Get a random cat picture/gif")
