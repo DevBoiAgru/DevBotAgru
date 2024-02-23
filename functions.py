@@ -1,4 +1,4 @@
-import discord, os, json, requests, random, praw, datetime
+import discord, os, json, requests, random, praw, datetime, urllib3
 from urllib.request import urlopen
 from dotenv import load_dotenv
 
@@ -31,6 +31,9 @@ reddit = praw.Reddit(client_id = REDDIT_CLIENT_ID,
                      client_secret = REDDIT_CLIENT_SECRET,
                      user_agent = REDDIT_USER_AGENT,
                      check_for_async = False)
+
+# Disable warnings for unverified HTTP requests
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # <-------ALL THE FUNCTIONS USED BY THE BOT------->
 
