@@ -7,11 +7,14 @@ I am not a professional discord bot developer, so don't expect everything to be 
 
 # Feature list:
 
-## Help: command syntax: /help
+## Help: /help
 ![Help](Screenshots/Help.png)
 
-## AI reply: command syntax: /devbot ```prompt```
+## AI reply: /devbot ```prompt```
 ![AI](Screenshots/AI.png)
+
+## AI text to image generation: /imagen ```prompt```
+![AI Image](Screenshots/AI-Image.png)
 
 ## Random cat photos: /meow
 ![Meow](Screenshots/Meow.png)
@@ -28,6 +31,16 @@ I am not a professional discord bot developer, so don't expect everything to be 
 
 ## Meme (random hot post from specified meme subs): /meme
 ![Meme](Screenshots/Meme.png)
+
+<hr>
+
+**Moderation:**
+
+- /ban `user` `reason`
+- /kick `user` `reason`
+- /unban `user` `reason`
+- /timeout `user` `reason` `duration`
+- /purge `number`
 
 ### And much more to come!
 
