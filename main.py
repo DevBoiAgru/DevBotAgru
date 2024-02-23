@@ -26,9 +26,16 @@ AI Image generation: /imagen `your prompt`
 Cat photo: /meow
 Dog photo: /woof
 Dad joke: /dadjoke
-Joke: /joke
-Meme: /meme
+Random joke: /joke
+Hot meme: /meme
 Fun fact: /fact
+
+**Moderation:**
+Ban user: /ban `user` `reason`
+Unban user: /unban `user id` `reason`
+Kick user: /kick `user` `reason`
+Timeout user: /timeout `user` `reason` `duration (days, hours, minutes, seconds)`
+Delete recent messages: /purge `number`
 
 **Enjoy!**
 """
