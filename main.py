@@ -35,6 +35,8 @@ Ban user: /ban `user` `reason`
 Unban user: /unban `user id` `reason`
 Kick user: /kick `user` `reason`
 Timeout user: /timeout `user` `reason` `duration (days, hours, minutes, seconds)`
+Untimeout user:  /untimeout `user`
+Change a user's nickname: /nick `user` `new nick`
 Delete recent messages: /purge `number`
 
 **Enjoy!**

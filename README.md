@@ -40,37 +40,33 @@ I am not a professional discord bot developer, so don't expect everything to be 
 - /kick `user` `reason`
 - /unban `user` `reason`
 - /timeout `user` `reason` `duration`
+- /untimeout `user`
+- /nick `user` `new nick`
 - /purge `number`
 
 ### And much more to come!
 
-## AI Chatbot personality:
-Fully Customisable AI personality so that you can customise it (duh)
-
-![AI](Screenshots/Bruh.png)
-
-### The bot uses discord.py for, well, discord, openai for the AI message replying.
-
-For using your own bot token, openai key or other keys, go to make a .env and set all your secrets as following:
+For using your own bot token, and other keys, go to make a .env and set all your secrets as following:
 
 ```
-export BOT_TOKEN = "your token"
-export OPENAI_API_KEY = "api key"
-export API_NINJA_KEY = "api key"
-export REDDIT_CLIENT_ID = "client id"
-export REDDIT_CLIENT_SECRET = "client secret"
-export REDDIT_USER_AGENT = "user agent"
+export BOT_TOKEN                = bot discord token
+export API_NINJA_KEY            = api ninja key
+export REDDIT_CLIENT_ID         = reddit client id
+export REDDIT_CLIENT_SECRET     = reddit client secret
+export REDDIT_USER_AGENT        = reddit username
+export DOPPLE_ID                = dopple id
+export DOPPLE_CHAT_ID           = dopple chat id
+export DOPPLE_USERNAME          = dopple username
+export DOPPLE_COOKIE            = dopple cookie
 ```
 
 ## APIs used:
 api-ninjas.com
 random.dog
 thecatapi.com
-openai
 reddit
 
 ### Find all the required modules in requirements.txt
-
 
 If you have any suggestions or queries, feel free to join my discord server and let me know! 
 
