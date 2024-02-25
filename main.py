@@ -87,27 +87,23 @@ async def on_message(message):
 async def on_command_error(interaction :discord.Interaction, error):
     if isinstance(error, app_commands.errors.MissingPermissions):
         msgembed = discord.Embed(title="Missing permissions", description= "Looks like you don't have the required permissions to use that command!",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
+        await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.MissingRole):
         msgembed = discord.Embed(title="Missing roles", description= "Looks like you don't have the required roles to use that command!",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
+        await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.BotMissingPermissions):
         msgembed = discord.Embed(title="Missing permissions", description= "Looks like I don't have the permissions to use that command!",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
+        await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.CommandOnCooldown):
         msgembed = discord.Embed(title="Hold on!", description= f"Command is on cooldown! Try again after {round(error.retry_after, 2)} seconds.",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
+        await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.CommandInvokeError):
-        msgembed = discord.Embed(title="Uh oh! Internal error! (rare find)", description= f"Looks like the command you tried to run gave up. Here's the error, send it to @devboiagru\n`{traceback.print_exception(type(error), error, error.__traceback__)}`",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
-        return
-    if isinstance(error, app_commands.errors):
-        msgembed = discord.Embed(title="Command Error!", description= f"Something went wrong while trying to contact discord's servers! Here's the data\n`{traceback.print_exception(type(error), error, error.__traceback__)}`",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.response.send_message(embed=msgembed, ephemeral=True)
+        msgembed = discord.Embed(title="Command Error!", description= f"Error happened: {error}",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
+        await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     f.log(f"[COMMAND ERROR] Error {error} of type {type(error)}")
 
@@ -227,7 +223,7 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
 @app_commands.checks.has_permissions(ban_members=True)
 @app_commands.describe(member = "Member", reason = "Reason")
 async def ban(interaction: discord.Interaction, member: discord.Member, reason: str = "None"):
-    await interaction.response.defer()
+    await interaction.response.defer()  
     await member.ban(reason=reason, delete_message_seconds=603800)
     f.log(f"[BAN]: Banned {member}")
     msgembed = discord.Embed(title=f"Banned {member}", description= f"Reason: {reason}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
@@ -245,21 +241,19 @@ async def unban(interaction: discord.Interaction, memberid: str, reason: str = "
         await interaction.guild.unban(target, reason=reason)
         f.log(f"[UNBAN]: Unbanned {target}")
         msgembed = discord.Embed(title=f"Unbanned {target}", description= f"Reason: {reason}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
-        await interaction.followup.send(embed=msgembed)
     except ValueError:
         msgembed = discord.Embed(title="Invalid ID inputted", description= "Required ID is not a valid integer",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.followup.send(embed=msgembed)
     except discord.NotFound:
         msgembed = discord.Embed(title="Member not found", description= "Member does not exist!",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
-        await interaction.followup.send(embed=msgembed)
+    await interaction.followup.send(embed=msgembed)
 
 # Timeout
 @bot.tree.command(name="timeout", description="Timeout a member")
 @app_commands.checks.has_permissions(moderate_members=True)
 @app_commands.describe(member = "Member", reason = "Reason", days = "Days", hours = "Hours", minutes="Minutes", seconds="Seconds")
-async def timeout(interaction: discord.Interaction, member: discord.Member, days: int = 1, hours: int = 0, minutes: int = 0, seconds: int = 0, reason: str = None):
+async def timeout(interaction: discord.Interaction, member: discord.Member, days: int = 0, hours: int = 0, minutes: int = 0, seconds: int = 0, reason: str = None):
     await interaction.response.defer()
-    duration = f.datetime.timedelta(seconds=seconds, minutes=minutes, hours= hours, days=days)
+    duration = f.datetime.timedelta(seconds=seconds, minutes=minutes, hours= hours, days=0 if not any((seconds, minutes, hours, days)) else 1)
     await member.timeout(duration, reason=reason)
     msgembed = discord.Embed(title=f"Timed out {member}", description= f"For: {duration}\nReason: {reason}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
     await interaction.followup.send(embed=msgembed, ephemeral=False)
