@@ -228,7 +228,7 @@ async def kick(interaction: discord.Interaction, member: discord.Member, reason:
 @app_commands.describe(member = "Member", reason = "Reason")
 async def ban(interaction: discord.Interaction, member: discord.Member, reason: str = "None"):
     await interaction.response.defer()
-    await member.ban(reason=reason, delete_message_days=10)
+    await member.ban(reason=reason, delete_message_seconds=603800)
     f.log(f"[BAN]: Banned {member}")
     msgembed = discord.Embed(title=f"Banned {member}", description= f"Reason: {reason}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
     await interaction.followup.send(embed=msgembed)
