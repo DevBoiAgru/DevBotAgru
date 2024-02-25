@@ -102,7 +102,7 @@ async def on_command_error(interaction :discord.Interaction, error):
         await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.CommandInvokeError):
-        msgembed = discord.Embed(title="Command Error!", description= f"Error happened: {error}",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
+        msgembed = discord.Embed(title="Command Error!", description= f"Error happened: {error.original}",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
         await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     f.log(f"[COMMAND ERROR] Error {error} of type {type(error)}")
