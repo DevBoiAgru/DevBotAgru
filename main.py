@@ -253,9 +253,29 @@ async def unban(interaction: discord.Interaction, memberid: str, reason: str = "
 @app_commands.describe(member = "Member", reason = "Reason", days = "Days", hours = "Hours", minutes="Minutes", seconds="Seconds")
 async def timeout(interaction: discord.Interaction, member: discord.Member, days: int = 0, hours: int = 0, minutes: int = 0, seconds: int = 0, reason: str = None):
     await interaction.response.defer()
-    duration = f.datetime.timedelta(seconds=seconds, minutes=minutes, hours= hours, days=0 if not any((seconds, minutes, hours, days)) else 1)
+    duration = f.datetime.timedelta(seconds=seconds, minutes=minutes, hours= hours, days=days)
     await member.timeout(duration, reason=reason)
     msgembed = discord.Embed(title=f"Timed out {member}", description= f"For: {duration}\nReason: {reason}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
+    await interaction.followup.send(embed=msgembed, ephemeral=False)
+
+# Untimeout
+@bot.tree.command(name="untimeout", description="Removes the timeout from a member (if the member is timed out)")
+@app_commands.checks.has_permissions(moderate_members=True)
+@app_commands.describe(member = "Member")
+async def untimeout(interaction: discord.Interaction, member: discord.Member):
+    await interaction.response.defer()
+    await member.edit(timed_out_until=None)
+    msgembed = discord.Embed(title=f"Untimed out {member}", description= "Bro can start yapping again",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
+    await interaction.followup.send(embed=msgembed, ephemeral=False)
+
+# Nick
+@bot.tree.command(name="nick", description="Change a member's nickname")
+@app_commands.checks.has_permissions(manage_nicknames=True)
+@app_commands.describe(member = "Member", nick = "New Nickname (Leave blank to reset)")
+async def nick(interaction: discord.Interaction, member: discord.Member, nick: str = None):
+    await interaction.response.defer()
+    await member.edit(nick=nick)
+    msgembed = discord.Embed(title=f"Changed {member}'s nickname", description= f"New nickname: {nick}",colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
     await interaction.followup.send(embed=msgembed, ephemeral=False)
 
 # Run the bot
