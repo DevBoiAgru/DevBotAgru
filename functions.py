@@ -81,7 +81,9 @@ def gpt(prmpt: str):
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={os.getenv('GEMINI_API_KEY')}"
     payload = {
-        "contents": [{"role": "user", "parts": [{"text": prmpt}]}]
+        "contents": [
+            {"role": "user", "parts": [{"text": f'{os.getenv("GEMINI_PROMPT")} In case you need this info, today is {datetime.datetime.now().strftime("%Y-%m-%d")}.'}]},
+            {"role": "user", "parts": [{"text": prmpt}]}]
     }
     response = requests.post(url, json=payload)
 
@@ -93,6 +95,9 @@ def gpt(prmpt: str):
             .get("parts")[0]
             .get("text")
         )
+        if response_text == "":
+            response_text = "Something went wrong, try again later"
+            raise Exception(response_text)
         print(f"[AI]: {response_text}")
         return response_text
     except Exception as e:
