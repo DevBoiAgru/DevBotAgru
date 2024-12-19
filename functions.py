@@ -29,7 +29,6 @@ DOPPLE_COOKIE = os.getenv("DOPPLE_COOKIE")  # Dopple cookie
 LOG_FILE = (
     "exhaust.txt"  # Name of the log file. Keep blank to disable logging to a file
 )
-LLM_CONFIG = "llm_config.json"  # Name of the LLM config file
 embed_colour = [8, 234, 142]  # R,G,B
 error_embed_colour = [250, 0, 0]  # R, G, B
 memesubs = [  # Subreddits to get a meme from
@@ -80,14 +79,9 @@ def log(text):
 def gpt(prmpt: str):
     print(f"[PROMPT]: {prmpt}")
 
-    with open(LLM_CONFIG, "r", encoding="utf-8") as text_file:
-        config: dict = json.load(text_file)
-
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={os.getenv('GEMINI_API_KEY')}"
-
-    pre_chat: list = config.get("pre_chat")
     payload = {
-        "contents": pre_chat + [{"role": "user", "parts": [{"text": prmpt}]}]
+        "contents": [{"role": "user", "parts": [{"text": prmpt}]}]
     }
     response = requests.post(url, json=payload)
 
