@@ -7,9 +7,6 @@ I am not a professional discord bot developer, so don't expect everything to be 
 
 # Feature list:
 
-## Help: /help
-![Help](Screenshots/Help.png)
-
 ## AI reply: /devbot ```prompt```
 ![AI](Screenshots/AI.png)
 
