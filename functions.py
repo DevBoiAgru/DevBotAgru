@@ -16,7 +16,7 @@ DOPPLE_USERNAME      = os.getenv("DOPPLE_USERNAME")               # Dopple regis
 DOPPLE_COOKIE        = os.getenv("DOPPLE_COOKIE")                 # Dopple cookie
 
 # Customisable values:
-LOG_TO_FILE        = False                        # Set to true if you want it to output logs to a file
+LOG_FILE           = "exhaust.txt"                # Name of the log file. Keep blank to disable logging to a file
 embed_colour       = [8, 234, 142]                # R,G,B
 error_embed_colour = [250, 0, 0]                  # R, G, B
 memesubs = [                                      # Subreddits to get a meme from
@@ -44,10 +44,10 @@ def error(title, description):
 
 # Function to log stuff, optionally to a text file
 def log(text):
-    logtext = "[" + str(datetime.datetime.now()) + "] " + text
+    logtext = f"[ {str(datetime.datetime.now())} ] {text}"
     print (logtext)
-    if LOG_TO_FILE:
-        with open("exhaust.txt", "a", encoding="utf-8") as text_file:   # Exhaust.txt is the name of the log file
+    if LOG_FILE:
+        with open(LOG_FILE, "a", encoding="utf-8") as text_file:   # Exhaust.txt is the name of the log file
             text_file.write(logtext)
 
 # Define a function to return ai output on a given input
@@ -77,23 +77,6 @@ def gpt(prmpt :str):
     print (f"Error while getting AI response: {response.text}")
     print(e)
     return e
-
-# Function to generate an AI generated image, FAST
-def ImageGen(PROMPT):
-    payload = {
-        "prompt": PROMPT,
-        "negative_prompt": "NSFW, (worst quality:2), (low quality:2), (normal quality:2), lowres, normal quality, ((grayscale)), skin spots, acnes, skin blemishes, age spot, (ugly:1.331), (duplicate:1.331), (morbid:1.21), (mutilated:1.21), (tranny:1.331), mutated hands, (poorly drawn hands:1.5), blurry, (bad anatomy:1.21), (bad proportions:1.331), extra limbs, (disfigured:1.331), (missing arms:1.331), (extra legs:1.331), (fused fingers:1.61051), (too many fingers:1.61051), (unclear eyes:1.331), lowers, bad hands, missing fingers, extra digit,bad hands, missing fingers, (((extra arms and legs)))",
-        "source": "sdxlturbo.ai"
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    response = requests.post("https://sd.cuilutech.com/sdapi/turbo/txt2img", json=payload, headers=headers, verify=False).json()
-    if response["code"] == 200:
-        log(f"[IMAGE GEN] PROMPT: {PROMPT}, RESULT: {response['data']['image_url']}")
-        return (response["data"]["image_url"], 200)
-    else:
-        return ("https://cdn.discordapp.com/attachments/1172240777599004863/1188333969444442122/Error.png?ex=659a2540&is=6587b040&hm=5b881e51338f0ccaa8b6cb5798b3b4ecc6ef93c5c708257442cabb08e9d9fb7b&", response["code"])
 
 # Function to make an embed with the best posts of a given subreddit
 def meme(posts_lim):
@@ -163,7 +146,7 @@ def woof():
 
 # Function to return an embed with a joke
 def joke():
-    api_url = 'https://api.api-ninjas.com/v1/jokes?limit=1'
+    api_url = 'https://api.api-ninjas.com/v1/jokes'
     jokeresponse = requests.get(api_url, headers={'X-Api-Key': API_NINJA_KEY})
     if jokeresponse.status_code == requests.codes.ok:
         jokedata = jokeresponse.json()
@@ -173,12 +156,12 @@ def joke():
         return jokeembed
     else:
         jokeembed = discord.Embed(title="No joke 😔", description="Error getting joke, try again later", colour=discord.Color.from_rgb(error_embed_colour[0], error_embed_colour[1], error_embed_colour[2]))
-        log ("[JOKE]: ERROR: " + jokeresponse.status_code + jokeresponse.text + '\n')
+        log (f"[JOKE]: ERROR: {jokeresponse.status_code} {jokeresponse.text}\n")
     return jokeembed
 
 # Function to return an embed with a dad joke
 def dadjoke():
-    api_url = 'https://api.api-ninjas.com/v1/dadjokes?limit=1'
+    api_url = 'https://api.api-ninjas.com/v1/dadjokes'
     dadresponse = requests.get(api_url, headers={'X-Api-Key': API_NINJA_KEY})
     if dadresponse.status_code == requests.codes.ok:
         daddata = dadresponse.json()
@@ -187,12 +170,12 @@ def dadjoke():
         log("[DAD JOKE]: " + dadjoke + '\n')
     else:
         dadembed = discord.Embed(title="No dad joke 😔", description="Error getting dad joke, try again later", colour=discord.Color.from_rgb(error_embed_colour[0], error_embed_colour[1], error_embed_colour[2]))
-        log ("[DAD JOKE]: ERROR: " + dadresponse.status_code + dadresponse.text + '\n')
+        log (f"[DAD JOKE]: ERROR: {dadresponse.status_code} {dadresponse.text}\n")
     return dadembed
 
 # Function to return an embed with a fact
 def fact():
-    api_url = 'https://api.api-ninjas.com/v1/facts?limit=1'
+    api_url = 'https://api.api-ninjas.com/v1/facts'
     factresponse = requests.get(api_url, headers={'X-Api-Key': API_NINJA_KEY})
     if factresponse.status_code == requests.codes.ok:
         factdata = factresponse.json()
@@ -201,5 +184,5 @@ def fact():
         log ("[FACT: " + fact)
     else:
         factembed = discord.Embed(title="Not so fun fact", description="Error getting fun fact, try again later", colour=discord.Color.from_rgb(error_embed_colour[0], error_embed_colour[1], error_embed_colour[2]))
-        log ("[FACT]: ERROR: " + factresponse.status_code + factresponse.text + '\n')
+        log (f"[FACT]: ERROR: {factresponse.status_code} {factresponse.text}\n")
     return factembed

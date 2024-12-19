@@ -22,7 +22,6 @@ helptxt="""
 
 Help: /help
 AI Chatbot: /devbot `your prompt`
-AI Image generation: /imagen `your prompt`
 Cat photo: /meow
 Dog photo: /woof
 Dad joke: /dadjoke
@@ -104,10 +103,10 @@ async def on_command_error(interaction :discord.Interaction, error):
         await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
     if isinstance(error, app_commands.errors.CommandInvokeError):
-        msgembed = discord.Embed(title="Command Error!", description= f"Error happened: {error.original}",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
+        msgembed = discord.Embed(title="Command Error!", description= f"Internal error happened: {error.original}\n Contact @devboiagru",colour=discord.Color.from_rgb(f.error_embed_colour[0], f.error_embed_colour[1], f.error_embed_colour[2]))
         await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
-    f.log(f"[COMMAND ERROR] Error {error} of type {type(error)}")
+    print(f"[COMMAND ERROR] Error {error} of type {type(error)}")
 
 
 # Help
@@ -182,21 +181,6 @@ async def help(interaction: discord.Interaction):
 async def help(interaction: discord.Interaction):
   await interaction.response.defer()
   await interaction.followup.send(embed = f.woof(), ephemeral=False)
-
-# Image generator
-@app_commands.checks.cooldown(rate=1,per=5)
-@bot.tree.command(name="imagen", description="Generate images from text!")
-@app_commands.describe(prompt = "Prompt")
-async def img(interaction: discord.Interaction, prompt: str):
-    await interaction.response.defer()
-    if len(prompt) > 255: # Check if prompt is too long
-       msgembed = f.error("Prompt too long!", "Write a prompt shorter than 256 characters please 😊")
-    else: 
-        result=f.ImageGen(prompt)
-        msgembed = discord.Embed(title=prompt[:250],colour=discord.Color.from_rgb(f.embed_colour[0], f.embed_colour[1], f.embed_colour[2]))
-        msgembed.set_image(url=result[0])
-
-    await interaction.followup.send(embed = msgembed, ephemeral=False)
 
 # <----------------- MODERATION COMMANDS ----------------->
 
