@@ -75,6 +75,34 @@ def log(text):
             text_file.write(logtext)
 
 
+def imageGen(prompt: str) -> bytes:
+    log(f"[IMAGE GEN]: Prompt: {prompt}\n")
+
+    payload = f'-----011000010111000001101001\r\nContent-Disposition: form-data; name="prompt"\r\n\r\n{prompt}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="output_format"\r\n\r\nbytes\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name="user_is_subscribed"\r\n\r\ntrue\r\n-----011000010111000001101001--\r\n'
+
+    headers = headers = {
+        "accept": "application/json, text/plain, */*",
+        "content-type": "multipart/form-data; boundary=---011000010111000001101001",
+        "origin": "https://magicstudio.com",
+        "referer": "https://magicstudio.com/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    }
+
+    image = requests.request(
+        "POST",
+        "https://ai-api.magicstudio.com/api/ai-art-generator",
+        data=payload,
+        headers=headers,
+    )
+
+    if image.status_code != 200:
+        log(f"[AI IMAGE]: ERROR {image.status_code} \n")
+        log(f"[AI IMAGE]: ERROR {image.text} \n")
+        return ""
+
+    return image.content
+
+
 # Define a function to return ai output on a given input
 def gpt(prmpt: str):
     print(f"[PROMPT]: {prmpt}")
@@ -82,8 +110,16 @@ def gpt(prmpt: str):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={os.getenv('GEMINI_API_KEY')}"
     payload = {
         "contents": [
-            {"role": "user", "parts": [{"text": f'{os.getenv("GEMINI_PROMPT")} In case you need this info, today is {datetime.datetime.now().strftime("%Y-%m-%d")}.'}]},
-            {"role": "user", "parts": [{"text": prmpt}]}]
+            {
+                "role": "user",
+                "parts": [
+                    {
+                        "text": f'{os.getenv("GEMINI_PROMPT")} In case you need this info, today is {datetime.datetime.now().strftime("%Y-%m-%d")}.'
+                    }
+                ],
+            },
+            {"role": "user", "parts": [{"text": prmpt}]},
+        ]
     }
     response = requests.post(url, json=payload)
 
@@ -98,11 +134,11 @@ def gpt(prmpt: str):
         if response_text == "":
             response_text = "Something went wrong, try again later"
             raise Exception(response_text)
-        print(f"[AI]: {response_text}")
+        log(f"[AI]: {response_text}")
         return response_text
     except Exception as e:
-        print(f"Error while getting AI response: {response.text}")
-        print(e)
+        log(f"Error while getting AI response: {response.text}")
+        log(e)
         return e
 
 

@@ -6,6 +6,7 @@ import functions as f
 from discord import app_commands
 from discord.ext import commands, tasks
 from itertools import cycle
+import io
 
 # Initialize bot
 TOKEN = f.BOT_TOKEN
@@ -94,6 +95,7 @@ async def on_message(message):
 # Permissions and command error handling
 @bot.tree.error
 async def on_command_error(interaction: discord.Interaction, error):
+    print(f"[ERROR WHILE EXECUTING COMMAND] Error {error} of type {type(error)}")
     if isinstance(error, app_commands.errors.MissingPermissions):
         msgembed = discord.Embed(
             title="Missing permissions",
@@ -154,7 +156,6 @@ async def on_command_error(interaction: discord.Interaction, error):
         )
         await interaction.followup.send(embed=msgembed, ephemeral=True)
         return
-    print(f"[COMMAND ERROR] Error {error} of type {type(error)}")
 
 
 # Help
@@ -170,6 +171,39 @@ async def help(interaction: discord.Interaction):
         ),
     )
     await interaction.followup.send(embed=helpembed, ephemeral=True)
+
+
+# Image generator
+@app_commands.checks.cooldown(rate=1, per=5)
+@bot.tree.command(name="imagen", description="Generate images from text!")
+@app_commands.describe(prompt="Prompt")
+async def img(interaction: discord.Interaction, prompt: str):
+    await interaction.response.defer()
+    if len(prompt) > 255:  # Check if prompt is too long
+        msgembed = f.error(
+            "Prompt too long!", "Write a prompt shorter than 256 characters please 😊"
+        )
+        await interaction.followup.send(embed=msgembed, ephemeral=False)
+    else:
+        result = f.imageGen(prompt)
+
+        if not result:
+            msgembed = f.error(
+                "Something went wrong!", "Try again later or contact @devboiagru"
+            )
+            await interaction.followup.send(embed=msgembed, ephemeral=False)
+            return
+
+        with io.BytesIO() as image_binary:
+            image_binary.write(result)
+            image_binary.seek(0)
+            await interaction.followup.send(
+                content=prompt,
+                file=discord.file.File(
+                    fp=image_binary, filename="ai_generated_slop.png"
+                ),
+                ephemeral=False,
+            )
 
 
 # AI Chatbot
