@@ -32,10 +32,14 @@ cd DevBotAgru
 ```
 
 3. Duplicate `.env.example`, rename it to `.env` and put details in it
-4. Set up a python virtual environment
+4. Set up a python virtual environment and activate it
 
 ```bash
 python -m venv .venv
+```
+```bash
+.venv\Scripts\activate.bat	# windows
+source .venv/bin/activate 	# linux
 ```
 
 5. Install dependencies
