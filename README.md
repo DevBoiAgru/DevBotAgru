@@ -37,6 +37,7 @@ cd DevBotAgru
 ```bash
 python -m venv .venv
 ```
+
 ```bash
 .venv\Scripts\activate.bat	# windows
 source .venv/bin/activate 	# linux

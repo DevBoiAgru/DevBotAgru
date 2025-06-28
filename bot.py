@@ -3,8 +3,10 @@ import logging
 import sys
 import time
 import os
+from discord.ext import tasks
 from dotenv import load_dotenv
 from collections import deque
+from itertools import cycle
 
 load_dotenv()
 
@@ -30,6 +32,27 @@ class DCBot(discord.Bot):
             int, deque[str]
         ] = {}  # A map of last few messages of chat with AI in a server.
         self.ai_context_length: int = ai_context_length
+
+
+PLAYING_STATUS = "with fire"  # Text to display when the bot has playing status
+WATCHING_STATUS = "the world burn."  # Text to display when the bot has watching status
+LISTENING_STATUS = "the voices"  # Text to display when bot has listening status
+STREAMING_STATUS = "DevBoi's Games"  # Text to display when bot has streaming status
+
+status_cycle = cycle(
+    (
+        discord.Activity(type=discord.ActivityType.playing, name=PLAYING_STATUS),
+        discord.Activity(type=discord.ActivityType.watching, name=WATCHING_STATUS),
+        discord.Activity(type=discord.ActivityType.listening, name=LISTENING_STATUS),
+        discord.Activity(type=discord.ActivityType.streaming, name=STREAMING_STATUS),
+    )
+)
+
+
+# Cycle through statusses every 25 seconds
+@tasks.loop(seconds=25)
+async def cycle_status():
+    await bot.change_presence(activity=next(status_cycle))
 
 
 bot = DCBot(
@@ -60,6 +83,9 @@ for cog in cogs_list:
 @bot.event
 async def on_ready():
     logging.info(f"{bot.user} is ready and online!")
+
+    cycle_status.start()
+    logging.info("[STATUS UPDATE] Started cycling through statusses")
 
 
 bot.run(os.getenv("BOT_TOKEN"))
