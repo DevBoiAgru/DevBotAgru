@@ -7,12 +7,13 @@ from discord.ext import commands
 from google import genai
 from google.genai import types as genai_types
 from collections import deque
+from lib.types import DCBot, AIMessage
 
 log = logging.getLogger(__name__)
 
 
 class AI(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: DCBot):
         self.bot = bot
         if self.bot.gemini_key:
             self.key_supplied = True
@@ -34,11 +35,25 @@ class AI(commands.Cog):
                 embed=discord.Embed(
                     title="No gemini API key provided!",
                     description="If you are the developer of this bot provide a gemini AI key to use chatbot.",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
-        server_context: deque = self.bot.ai_context.get(ctx.interaction.guild_id)
+
+        guild_id: int = ctx.interaction.guild_id if ctx.interaction.guild_id else -1
+
+        if guild_id == -1:
+            log.error("[AI CHATBOT]: Could not fetch guild id.")
+            await ctx.respond(
+                embed=discord.Embed(
+                    title="Failed getting guild id.",
+                    description="Could not figure out what server I am in. Perhaps this is not a guild?",
+                    color=self.bot.err_colour,
+                )
+            )
+            return
+
+        server_context: deque | None = self.bot.ai_context.get(guild_id)
 
         if len(prompt) > 250:
             log.warning("[AI CHATBOT]: User prompt too long, not continuing.")
@@ -46,7 +61,7 @@ class AI(commands.Cog):
                 embed=discord.Embed(
                     title="Prompt too long!",
                     description="Use a prompt less than 250 characters.",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
@@ -56,13 +71,13 @@ class AI(commands.Cog):
 
         # If we dont have a history for this message, create a deque for it
         if not server_context:
-            self.bot.ai_context[ctx.interaction.guild_id] = deque(
+            self.bot.ai_context[guild_id] = deque(
                 maxlen=2 * self.bot.ai_context_length + 1
             )  # +1 for the system prompt, *2 since each message has a reply from the bot
 
         # Add prompt to history
-        self.bot.ai_context[ctx.interaction.guild_id].append(
-            {"bot": False, "message": f"{ctx.author.display_name} : {prompt}"}
+        self.bot.ai_context[guild_id].append(
+            AIMessage(False, f"{ctx.author.display_name} : {prompt}")
         )
 
         # Create a list of messages to send to gemini
@@ -79,11 +94,11 @@ class AI(commands.Cog):
 
         # Loop over all messages in the context for this particular guild and add them to the gemini context list
         # We do not need to check for the size since the ai_context is already a deque of a fixed size
-        for msg in self.bot.ai_context[ctx.interaction.guild_id]:
+        for msg in self.bot.ai_context[guild_id]:
             ai_context_messages.append(
                 genai_types.Content(
-                    role="model" if msg.get("bot") else "user",
-                    parts=[genai_types.Part.from_text(text=msg.get("message"))],
+                    role="model" if msg.isBot else "user",
+                    parts=[genai_types.Part.from_text(text=msg.message)],
                 ),
             )
 
@@ -95,21 +110,23 @@ class AI(commands.Cog):
             ai_reply = self.genai_client.models.generate_content(
                 model="gemini-1.5-flash", contents=ai_context_messages
             ).text
+
+            if not ai_reply:
+                raise RuntimeError("Got an empty response from the AI!")
+
         except Exception:
             log.error("[AI CHATBOT]: Error while generating AI response", exc_info=True)
             await ctx.interaction.followup.send(
                 embed=discord.Embed(
                     title="Error while generating response!",
                     description="An error occured while generating a response.",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
 
         # Add ai reply to history
-        self.bot.ai_context[ctx.interaction.guild_id].append(
-            {"bot": True, "message": ai_reply}
-        )
+        self.bot.ai_context[guild_id].append(AIMessage(True, ai_reply))
 
         log.info(f"[AI CHATBOT]: Response: {ai_reply}")
         await ctx.interaction.followup.send(
@@ -130,7 +147,7 @@ class AI(commands.Cog):
                 embed=discord.Embed(
                     title="Prompt too long!",
                     description="Use a prompt less than 250 characters.",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
@@ -161,7 +178,7 @@ class AI(commands.Cog):
                 embed=discord.Embed(
                     title="Error while generating image!",
                     description=f"An error occured while generating a response. Status code: {response.status_code}",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
@@ -176,7 +193,7 @@ class AI(commands.Cog):
                 embed=discord.Embed(
                     title="Something went wrong while generating image!",
                     description="An error occured while generating a response. Couldn't generate image",
-                    color=discord.Colour.from_rgb(255, 0, 0),
+                    color=self.bot.err_colour,
                 )
             )
             return
@@ -194,5 +211,5 @@ class AI(commands.Cog):
             )
 
 
-def setup(bot: discord.Bot):  # this is called by Pycord to setup the cog
+def setup(bot: DCBot):  # this is called by Pycord to setup the cog
     bot.add_cog(AI(bot))  # add the cog to the bot

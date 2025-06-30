@@ -1,9 +1,10 @@
 import discord
 from discord.ext import commands
+from lib.types import DCBot
 
 
 class Utils(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: DCBot):
         self.bot = bot
 
     # Utility commands
@@ -16,7 +17,7 @@ class Utils(commands.Cog):
                 fields=[
                     discord.EmbedField(
                         name="Latency",
-                        value=f"{self.bot.latency:.2f} seconds",
+                        value=f"`{self.bot.latency:.2f} seconds`",
                         inline=True,
                     ),
                     discord.EmbedField(
@@ -54,5 +55,5 @@ class Utils(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-def setup(bot: discord.Bot):  # this is called by Pycord to setup the cog
+def setup(bot: DCBot):  # this is called by Pycord to setup the cog
     bot.add_cog(Utils(bot))  # add the cog to the bot

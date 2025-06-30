@@ -2,6 +2,7 @@ import discord
 import json
 import random
 from discord.ext import commands
+from lib.types import DCBot
 
 
 class Fun(commands.Cog):
@@ -9,7 +10,7 @@ class Fun(commands.Cog):
     jokes: list[dict[str, str]]
     facts: list[dict[str, str]]
 
-    def __init__(self, bot):
+    def __init__(self, bot: DCBot):
         self.bot = bot
 
         # Load jokes into memory
@@ -56,5 +57,5 @@ class Fun(commands.Cog):
         await ctx.respond(embed=embed)
 
 
-def setup(bot: discord.Bot):  # this is called by Pycord to setup the cog
+def setup(bot: DCBot):  # this is called by Pycord to setup the cog
     bot.add_cog(Fun(bot))  # add the cog to the bot
