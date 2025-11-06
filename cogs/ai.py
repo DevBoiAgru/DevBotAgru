@@ -72,8 +72,8 @@ class AI(commands.Cog):
         # If we dont have a history for this message, create a deque for it
         if not server_context:
             self.bot.ai_context[guild_id] = deque(
-                maxlen=2 * self.bot.ai_context_length + 1
-            )  # +1 for the system prompt, *2 since each message has a reply from the bot
+                maxlen=2 * self.bot.ai_context_length
+            )  # *2 since each message has a reply from the bot
 
         # Add prompt to history
         self.bot.ai_context[guild_id].append(
@@ -81,16 +81,8 @@ class AI(commands.Cog):
         )
 
         # Create a list of messages to send to gemini
-        ai_context_messages = [
-            genai_types.Content(
-                role="user",
-                parts=[
-                    genai_types.Part.from_text(
-                        text=f"{self.bot.gemini_prompt} In case you need this info, it is currently {datetime.now(timezone.utc).strftime('%Y/%m/%d %H:%M UTC')}"
-                    )
-                ],
-            ),
-        ]
+        ai_context_messages = []
+        ai_system_prompt = f"{self.bot.gemini_prompt} In case you need this info, it is currently {datetime.now(timezone.utc).strftime('%Y/%m/%d %H:%M UTC')}"
 
         # Loop over all messages in the context for this particular guild and add them to the gemini context list
         # We do not need to check for the size since the ai_context is already a deque of a fixed size
@@ -108,7 +100,12 @@ class AI(commands.Cog):
                 f"[AI CHATBOT]: Generating response using history for guild {ctx.interaction.guild_id}"
             )
             ai_reply = self.genai_client.models.generate_content(
-                model="gemini-1.5-flash", contents=ai_context_messages
+                model="gemini-2.0-flash",
+                contents=ai_context_messages,
+                config=genai_types.GenerateContentConfig(
+                            system_instruction=ai_system_prompt
+                        ),
+
             ).text
 
             if not ai_reply:
@@ -205,7 +202,7 @@ class AI(commands.Cog):
             await ctx.interaction.followup.send(
                 content=prompt,
                 file=discord.file.File(
-                    fp=image_binary, filename="ai_generated_slop.png"
+                    fp=image_binary, filename="ai_slop.png"
                 ),
                 ephemeral=False,
             )
