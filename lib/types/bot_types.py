@@ -18,6 +18,7 @@ class DCBot(discord.Bot):
         self,
         gemini_key: str | None,
         gemini_prompt: str | None,
+        currency_apiKey: str | None,
         bot_colour: discord.Colour,
         start_time: int,
         ai_context_length: int,
@@ -27,6 +28,8 @@ class DCBot(discord.Bot):
 
         self.gemini_key: str | None = gemini_key
         self.gemini_prompt: str | None = gemini_prompt
+        self.currency_apiKey: str | None = currency_apiKey
+        
         self.start_time: int = start_time
 
         self.bot_colour: discord.Colour = bot_colour

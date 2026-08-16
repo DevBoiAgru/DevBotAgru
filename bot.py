@@ -31,14 +31,18 @@ status_cycle = cycle(
 async def cycle_status():
     await bot.change_presence(activity=next(status_cycle))
 
+# Load API Keys, so that we can skip cogs if the keys used are not available
+GEMINI_KEY = os.getenv("GEMINI_KEY")
+CURRENCY_API_KEY = os.getenv("CURRENCY_API_KEY")
 
 bot = DCBot(
-    gemini_key=os.getenv("GEMINI_KEY"),  # Google gemini API key
-    gemini_prompt=os.getenv("GEMINI_PROMPT"),  # System prompt for the LLM
-    bot_colour=discord.Colour.from_rgb(0, 0, 255),  # Colour for embeds
-    err_colour=discord.Colour.from_rgb(255, 0, 0),
-    start_time=int(time.time()),  # Bot startup time
-    ai_context_length=20,  # Number of queries given to AI to save as context (for each server)
+    gemini_key = GEMINI_KEY,
+    gemini_prompt = os.getenv("GEMINI_PROMPT"),  # System prompt for the LLM,
+    currency_apiKey= CURRENCY_API_KEY,
+    bot_colour = discord.Colour.from_rgb(0, 0, 255),  # Colour for embeds
+    err_colour = discord.Colour.from_rgb(255, 0, 0),
+    start_time = int(time.time()),  # Bot startup time
+    ai_context_length = 20,  # Number of queries given to AI to save as context (for each server)
 )
 
 logging.basicConfig(
@@ -53,8 +57,11 @@ logging.basicConfig(
 )
 
 # Load cogs
-cogs_list = ["fun", "utils", "ai"]
+cogs_list = ["fun", "utils", "ai", "tools"]
 for cog in cogs_list:
+    if (GEMINI_KEY is None and cog == "ai"):
+        logging.info("[COGS] Skipping loading AI cog because of no Gemini API key.")
+        continue
     bot.load_extension(f"cogs.{cog}")
 
 
