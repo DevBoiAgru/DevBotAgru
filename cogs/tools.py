@@ -127,7 +127,7 @@ class Tools(commands.Cog):
             if len(expression) > 250:
                 raise InputTooLong("Input expression too long")
             val = calculator.solve(expression)
-            embed.title = expression
+            embed.title = f"`{expression}`"
             embed.description = f"**{str(val)}**"
             embed.color = self.bot.bot_colour
 
