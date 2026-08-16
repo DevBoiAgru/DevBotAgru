@@ -45,11 +45,11 @@ class Tools(commands.Cog):
 
         rate = data["conversion_rate"]
 
-        # Cache rate for 48 hours
-        self.currency_rates[cache_key] = (
-            rate,
-            time.monotonic() + (60 * 60 * 48),
-        )
+        expiry = time.monotonic() + (60 * 60 * 48)
+
+        # Cache BASE to TARGET as well as TARGET to BASE by reciprocating the rate
+        self.currency_rates[(base, target)] = (rate, expiry)
+        self.currency_rates[(target, base)] = (1 / rate, expiry)
 
         return {
             "success": True,
