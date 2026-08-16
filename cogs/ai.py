@@ -24,7 +24,11 @@ class AI(commands.Cog):
             self.genai_client = genai.Client(api_key=self.bot.gemini_key)
 
     @discord.slash_command(name="devbot", description="Chat with devbot!")
-    async def devbot(self, ctx: discord.ApplicationContext, prompt: str):
+    async def devbot(
+        self, 
+        ctx: discord.ApplicationContext, 
+        prompt: discord.Option(str, description="Message for @devbotagru"), # pyright: ignore[reportInvalidTypeForm]
+        ):
         log.info(f"[AI CHATBOT]: User: {ctx.author.id} Prompt: {prompt}")
 
         if not self.key_supplied:

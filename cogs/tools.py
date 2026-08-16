@@ -66,9 +66,9 @@ class Tools(commands.Cog):
     async def currency_convert(
         self,
         ctx: discord.ApplicationContext,
-        amount: float,
-        base: str,
-        target: str
+        amount: discord.Option(float, description="How much currency to convert"), # pyright: ignore[reportInvalidTypeForm],
+        base: discord.Option(str, description="The currency to convert from. Example: INR, USD (3 Letter code)"), # pyright: ignore[reportInvalidTypeForm]
+        target: discord.Option(str, description="The currency to convert to. Example: USD, EUR (3 Letter code)") # pyright: ignore[reportInvalidTypeForm]
     ):
         base = base.upper()
         target = target.upper()
