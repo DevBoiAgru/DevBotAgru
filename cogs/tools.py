@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from lib.types import DCBot
+from lib.calc import Calculator, InvalidExpression, InputTooLong, ResultTooBig, CalculatorError
 import aiohttp
 import time
 
@@ -58,7 +59,7 @@ class Tools(commands.Cog):
         }
 
 
-    # Utility commands
+    # Useful commands
     @discord.slash_command(
         name="currency",
         description="Convert amount between currencies using 3 letter codes like USD, EUR, INR"
@@ -109,6 +110,40 @@ class Tools(commands.Cog):
 
         await ctx.respond(embed=currEmbed)
 
+
+    @discord.slash_command(
+        name="calc",
+        description="Short for calculator. Solves expressions like 2+3/2*(10*10). Supports: +-*/^ and sqrt()"
+    )
+    async def calc(
+        self,
+        ctx: discord.ApplicationContext,
+        expression: discord.Option(str, description="The mathematical expression to calculate. pi and e can be used as constants"), # pyright: ignore[reportInvalidTypeForm],
+    ):
+        calculator = Calculator()
+        embed = discord.Embed()
+
+        try:
+            if len(expression) > 250:
+                raise InputTooLong("Input expression too long")
+            val = calculator.solve(expression)
+            embed.title = expression
+            embed.description = f"**{str(val)}**"
+            embed.color = self.bot.bot_colour
+
+        except CalculatorError as e:
+            embed.title = "Calc Error"
+            embed.color = self.bot.err_colour
+            embed.description = str(e)
+
+            if isinstance(e, InputTooLong):
+                embed.title = "Input error"
+            elif isinstance(e, InvalidExpression):
+                embed.title = "Invalid expression"
+            elif isinstance(e, ResultTooBig):
+                embed.title = "Result too big to display"
+
+        await ctx.respond(embed=embed)
 
 def setup(bot: DCBot):  # this is called by Pycord to setup the cog
     bot.add_cog(Tools(bot))  # add the cog to the bot
