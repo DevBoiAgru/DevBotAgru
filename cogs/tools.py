@@ -1,28 +1,84 @@
 import discord
 from discord.ext import commands
 from lib.types import DCBot
-import requests
+import aiohttp
+import time
 
 
 class Tools(commands.Cog):
     def __init__(self, bot: DCBot):
         self.bot = bot
+        self.currency_rates = {}    # Cache for currency rates. Format: {(BASE, TARG): (RATE, EXPIRY)}, Example: {("USD", "EUR"): (0.85, 1786960000)} 
 
-    # Utility commands
-    @discord.slash_command(name="currency", description="Convert amount between currencies using 3 letter codes like USD, EUR, INR")
-    async def currency_convert(self, ctx: discord.ApplicationContext, amount: float, base: str, target: str):
+    async def __get_currency_rate(self, base: str, target: str):
         base = base.upper()
         target = target.upper()
 
-        url = f"https://v6.exchangerate-api.com/v6/{self.bot.currency_apiKey}/pair/{base}/{target}/{amount}"
+        cache_key = (base, target)
 
-        req = requests.get(url)
-        data = req.json()
+        # Check cache
+        if cache_key in self.currency_rates:
+            rate, expiry = self.currency_rates[cache_key]
+
+            if time.monotonic() < expiry:
+                return {
+                    "success": True,
+                    "rate": rate,
+                    "error": None,
+                }
+
+        # Not cached or cache expired
+        url = (
+            f"https://v6.exchangerate-api.com/v6/{self.bot.currency_apiKey}/pair/{base}/{target}"
+        )
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                data = await response.json()
+
+        if data.get("result") == "error":
+            return {
+                "success": False,
+                "error": data.get("error-type", "unknown-error"),
+                "rate": None,
+            }
+
+        rate = data["conversion_rate"]
+
+        # Cache rate for 48 hours
+        self.currency_rates[cache_key] = (
+            rate,
+            time.monotonic() + (60 * 60 * 48),
+        )
+
+        return {
+            "success": True,
+            "rate": rate,
+            "error": None,
+        }
+
+
+    # Utility commands
+    @discord.slash_command(
+        name="currency",
+        description="Convert amount between currencies using 3 letter codes like USD, EUR, INR"
+    )
+    async def currency_convert(
+        self,
+        ctx: discord.ApplicationContext,
+        amount: float,
+        base: str,
+        target: str
+    ):
+        base = base.upper()
+        target = target.upper()
+
+        data = await self.__get_currency_rate(base, target)
 
         currEmbed = discord.Embed()
 
-        if data.get("result") == "error":
-            error = data.get("error-type", "unknown-error")
+        if not data["success"]:
+            error = data["error"]
 
             errorMeanings = {
                 "unsupported-code": "Currency is not supported.",
@@ -39,17 +95,19 @@ class Tools(commands.Cog):
             )
 
         else:
+            rate = data["rate"]
+            converted = amount * rate
+
             currEmbed.color = self.bot.bot_colour
             currEmbed.title = "Currency Conversion"
             currEmbed.description = (
-                f"{amount:g} {base} is **{data['conversion_result']:g} {target}**"
+                f"{amount:g} {base} is **{converted:g} {target}**"
             )
             currEmbed.set_footer(
-                text=f"Rate: 1 {base} = {data['conversion_rate']:g} {target}"
+                text=f"Rate: 1 {base} = {rate:g} {target}"
             )
 
         await ctx.respond(embed=currEmbed)
-
 
 
 def setup(bot: DCBot):  # this is called by Pycord to setup the cog
