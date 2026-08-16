@@ -11,10 +11,10 @@ from itertools import cycle
 load_dotenv(override=True)
 
 
-PLAYING_STATUS = "with fire"  # Text to display when the bot has playing status
-WATCHING_STATUS = "the world burn."  # Text to display when the bot has watching status
-LISTENING_STATUS = "the voices"  # Text to display when bot has listening status
-STREAMING_STATUS = "DevBoi's Games"  # Text to display when bot has streaming status
+PLAYING_STATUS = "Playing with fire"  # Text to display when the bot has playing status
+WATCHING_STATUS = "Watching the world burn."  # Text to display when the bot has watching status
+LISTENING_STATUS = "Listening to the voices"  # Text to display when bot has listening status
+STREAMING_STATUS = "Playing DevBoi's Games"  # Text to display when bot has streaming status
 
 status_cycle = cycle(
     (
