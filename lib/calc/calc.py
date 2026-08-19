@@ -72,52 +72,61 @@ class Calculator:
         return tokenised
 
     def infixToPostfix(self, infix: list[Token]) -> list[Token]:
-        operatorStack: list[Token] = []
+        operatorStack: list[Operator] = []
         postfix: list[Token] = []
 
         for token in infix:
             if isinstance(token, Operand):
                 postfix.append(token)
-            else:
-                # Token is an operator
-                
-                if len(operatorStack) == 0:
-                    operatorStack.append(token)
-                else:
-                    top = cast(Operator, operatorStack[-1])
-                    current = cast(Operator, token)
+                continue
 
-                    # Special case for brackets
-                    if current.operator == OperatorTypes.BRACKET_OPEN or current.operator == OperatorTypes.BRACKET_CLOSE:
-                        # ")"
-                        if current.operator == OperatorTypes.BRACKET_CLOSE:
-                            # Pop all until "("
-                            while operatorStack and cast(Operator, operatorStack[-1]).operator != OperatorTypes.BRACKET_OPEN:
-                                postfix.append(operatorStack.pop())
-                            # Remove the "("
-                            operatorStack.pop()
+            # Token is an operator
+            op = cast(Operator, token)
 
-                        # "("
-                        else:
-                            operatorStack.append(current)
+            # Open bracket
+            if op.operator == OperatorTypes.BRACKET_OPEN:
+                operatorStack.append(op)
+                continue
 
+            # Close bracket
+            if op.operator == OperatorTypes.BRACKET_CLOSE:
+                # Pop and push until open bracket is found
+                while (
+                    operatorStack
+                    and operatorStack[-1].operator != OperatorTypes.BRACKET_OPEN
+                ):
+                    postfix.append(operatorStack.pop())
 
-                    else:
-                        # Mathematical operators
+                if not operatorStack:
+                    raise InvalidExpression("Unmatched closing paranthesis")
 
-                        if (current.precedence > top.precedence) or (current.precedence == top.precedence and current.rightAssociative) or top.operator == OperatorTypes.BRACKET_OPEN:
-                            operatorStack.append(current)
-                        else:
-                            while operatorStack and cast(Operator, operatorStack[-1]).operator != OperatorTypes.BRACKET_OPEN and (
-                                cast(Operator, operatorStack[-1]).precedence > current.precedence or (
-                                        cast(Operator, operatorStack[-1]).precedence == current.precedence and not current.rightAssociative
-                                    )
-                                ):
-                                postfix.append(operatorStack.pop())
-                            operatorStack.append(current)
-        # Empty the stack
-        while operatorStack:
+                # Remove the open bracket we found
+                operatorStack.pop()
+                continue
+
+            # Regular operator
+            while operatorStack:
+                top = operatorStack[-1]
+
+                if top.operator == OperatorTypes.BRACKET_OPEN:
+                    break
+
+                if top.precedence > op.precedence:
+                    postfix.append(operatorStack.pop())
+                    continue
+
+                if top.precedence == op.precedence and not op.rightAssociative:
+                    postfix.append(operatorStack.pop())
+                    continue
+
+                break
+
+            operatorStack.append(op)
+
+        # Empty the remaining stack
+        while (operatorStack):
             postfix.append(operatorStack.pop())
+
         return postfix
 
 
@@ -178,7 +187,7 @@ class Calculator:
         postfix = self.infixToPostfix(infix)
         result = self.evaluate(postfix)
 
-        estimated_digits = int(result * abs(result).ln() / Decimal(10) ) + 1
+        estimated_digits = int(abs(result).log10()) + 1
 
         if estimated_digits > 750:
             raise ResultTooBig(f"Result too large. Estimated {estimated_digits} digits long.")
