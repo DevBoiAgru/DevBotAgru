@@ -2,9 +2,10 @@ import discord
 from discord.ext import commands
 from lib.types import DCBot
 from lib.calc import Calculator, InvalidExpression, InputTooLong, ResultTooBig, CalculatorError
+from decimal import Decimal
 import aiohttp
 import time
-
+import random
 
 class Tools(commands.Cog):
     def __init__(self, bot: DCBot):
@@ -102,7 +103,7 @@ class Tools(commands.Cog):
             currEmbed.color = self.bot.bot_colour
             currEmbed.title = "Currency Conversion"
             currEmbed.description = (
-                f"{amount:g} {base} is **{converted:g} {target}**"
+                    f"{Decimal(amount).normalize():f} {base} is **{Decimal(converted).normalize():f} {target}**"
             )
             currEmbed.set_footer(
                 text=f"Rate: 1 {base} = {rate:g} {target}"
@@ -127,6 +128,8 @@ class Tools(commands.Cog):
             if len(expression) > 250:
                 raise InputTooLong("Input expression too long")
             val = calculator.solve(expression)
+            if expression == "9+10" and random.random() > 0.75:
+                val = 21
             embed.title = f"`{expression}`"
             embed.description = f"**{str(val)}**"
             embed.color = self.bot.bot_colour
