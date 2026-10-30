@@ -176,3 +176,4 @@ pyrightconfig.json
 
 # Discord bot log file
 bot.log
+log.txt

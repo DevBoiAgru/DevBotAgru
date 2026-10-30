@@ -57,7 +57,7 @@ logging.basicConfig(
 )
 
 # Load cogs
-cogs_list = ["fun", "utils", "ai", "tools"]
+cogs_list = ["fun", "utils", "ai", "tools", "message_tools"]
 for cog in cogs_list:
     if (GEMINI_KEY is None and cog == "ai"):
         logging.info("[COGS] Skipping loading AI cog because of no Gemini API key.")
